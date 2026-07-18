@@ -2,124 +2,523 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gen Downloader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gen Downloader - Premium Multi-Platform Video Downloader</title>
+    
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="Gen Downloader - Layanan gratis untuk download video TikTok tanpa watermark, Facebook, Instagram, dan platform lainnya dengan cepat dan mudah.">
+    <meta name="keywords" content="download tiktok, tiktok downloader, download video fb, gen downloader, tanpa watermark, download instagram">
+    <meta name="robots" content="index, follow">
+
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden; /* Mengunci geser horizontal */
+        }
         body { 
-            background: #0f172a; 
-            color: white; 
-            font-family: sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            padding-top: 50px; 
+            background: #020617; 
+            color: #f8fafc; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
         }
-        .box { 
-            background: #1e293b; 
-            padding: 20px; 
-            border-radius: 12px; 
-            width: 90%; 
-            max-width: 400px; 
-            text-align: center; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+
+        /* --- BACKGROUND CANVAS PARTIKEL --- */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none; /* Biar tidak mengganggu klik di web */
         }
-        input { 
-            width: 100%; 
-            padding: 12px; 
-            margin: 15px 0; 
-            border-radius: 6px; 
-            border: 1px solid #334155; 
-            background: #0f172a;
+
+        /* Ambient Glow Penyeimbang */
+        .bg-glow-static {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -10%;
+            left: -10%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Header Navbar */
+        header {
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(to right, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #3b82f6;
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 800px;
+            padding: 60px 20px 40px 20px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        h1 span {
+            background: linear-gradient(to right, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tagline {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Input Form Card (Glassmorphism) */
+        .search-container {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px;
+            border-radius: 16px;
+            display: flex;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+            width: 100%;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .search-container:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+        }
+        .search-container input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 18px;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+        }
+        .search-container input::placeholder {
+            color: #64748b;
+        }
+        .search-container button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white;
-            box-sizing: border-box; 
+            border: none;
+            padding: 0 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        button { 
-            background: #3b82f6; 
-            color: white; 
-            padding: 12px 20px; 
-            border: none; 
-            border-radius: 6px; 
-            width: 100%; 
-            cursor: pointer; 
-            font-weight: bold;
+        .search-container button:hover {
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
         }
-        button:disabled {
-            background: #475569;
+        .search-container button:disabled {
+            background: #334155;
+            color: #64748b;
             cursor: not-allowed;
         }
+
+        /* Loader Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #status {
+            margin-bottom: 50px;
+        }
         .dl-btn {
-            display: inline-block;
-            background: #10b981;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
             color: white;
             text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-weight: bold;
-            margin-top: 15px;
-            width: 90%;
-            box-sizing: border-box;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .dl-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Platform Grid Section */
+        .platform-section {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .platform-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #64748b;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+        .platform-link {
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+        .platform-card {
+            background: rgba(30, 41, 59, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+        .platform-card:hover {
+            background: rgba(30, 41, 59, 0.5);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        .platform-card svg {
+            width: 32px;
+            height: 32px;
+            transition: transform 0.3s ease;
+        }
+        .platform-card:hover svg {
+            transform: scale(1.1);
+        }
+        .platform-card span {
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .platform-card:hover span {
+            color: #ffffff;
+        }
+
+        /* Responsive Breakpoints (Mobile HP) */
+        @media (max-width: 640px) {
+            h1 { font-size: 32px; }
+            .tagline { font-size: 14px; }
+            
+            .search-container { 
+                flex-direction: column; 
+                background: transparent; 
+                box-shadow: none; 
+                padding: 0; 
+                gap: 12px;
+                border: none;
+                width: 100%;
+            }
+            
+            .search-container:focus-within {
+                border-color: transparent;
+                box-shadow: none;
+            }
+
+            .search-container input { 
+                background: rgba(30, 41, 59, 0.5); 
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.08); 
+                border-radius: 12px; 
+                width: 100%;
+                box-sizing: border-box;
+                outline: none;
+            }
+            
+            .search-container input:focus {
+                border-color: #3b82f6;
+                box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+            }
+
+            .search-container button { 
+                width: 100%; 
+                padding: 14px 0; 
+                justify-content: center; 
+                border-radius: 12px;
+                box-sizing: border-box;
+            }
+            .platform-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>Gen Downloader</h2>
-    <p style="color: #94a3b8; font-size: 14px;">Download Video TikTok & FB Langsung</p>
-    <input type="text" id="url" placeholder="Tempel link TikTok atau FB di sini...">
-    <button id="btnDownload" onclick="downloadVideo()">Proses Video</button>
-    <div id="status" style="margin-top:20px; font-size: 14px; color: #cbd5e1;"></div>
-</div>
+    <!-- HTML5 Canvas untuk Partikel Terhubung -->
+    <canvas id="particleCanvas"></canvas>
+    
+    <div class="bg-glow-static"></div>
 
-<script>
-    async function downloadVideo() {
-        const urlInput = document.getElementById('url').value.trim();
-        const status = document.getElementById('status');
-        const btn = document.getElementById('btnDownload');
+    <header>
+        <div class="logo">GenDownload</div>
+        <div class="nav-links">
+            <a href="#" class="active">Pengunduh</a>
+            <a href="#">API</a>
+            <a href="#">Blog</a>
+        </div>
+    </header>
 
-        if (!urlInput) {
-            alert('Masukkan link-nya dulu bos!');
-            return;
+    <main>
+        <h1>Unduh Video <span>Multi-Platform</span></h1>
+        <p class="tagline">Unduh video favoritmu tanpa watermark dalam kualitas terbaik. Cepat, gratis, dan mendukung berbagai macam perangkat.</p>
+
+        <div class="search-container">
+            <input type="text" id="url" placeholder="Tempel tautan video di sini...">
+            <button id="btnDownload" onclick="downloadVideo()">
+                <div class="spinner" id="btnSpinner"></div>
+                <span id="btnText">Unduh</span>
+            </button>
+        </div>
+
+        <div id="status"></div>
+
+        <div class="platform-section">
+            <div class="platform-title">Kunjungi & Unduh Dari Platform</div>
+            <div class="platform-grid">
+                <!-- TikTok -->
+                <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+                    <div class="platform-card">
+                        <svg viewBox="0 0 24 24" fill="#ff0050"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.74-3.94-1.78-.22-.22-.42-.47-.62-.71v7.12a7.41 7.41 0 01-1.9 4.97A7.44 7.44 0 016.92 18.5a7.45 7.45 0 01-2.1-5.62 7.42 7.42 0 016.96-7.37v4.04a3.39 3.39 0 00-2.88 3.36 3.4 3.4 0 003.4 3.4 3.43 3.43 0 003.43-3.41V0h-3.2v.02z"/></svg>
+                        <span>TikTok</span>
+                    </div>
+                </a>
+                
+                <!-- Facebook -->
+                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+                    <div class="platform-card">
+                        <svg viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        <span>Facebook</span>
+                    </div>
+                </a>
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+                    <div class="platform-card">
+                        <svg viewBox="0 0 24 24" fill="#e1306c"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        <span>Instagram</span>
+                    </div>
+                </a>
+
+                <!-- YouTube -->
+                <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+                    <div class="platform-card">
+                        <svg viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        <span>YouTube</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        /* --- ENGINE SCRIPT PARTIKEL TERHUBUNG (CANVAS) --- */
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        // Kurangi jumlah partikel di mobile biar enteng
+        const numberOfParticles = window.innerWidth < 640 ? 40 : 85; 
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1; // Ukuran partikel titik
+                this.speedX = (Math.random() * 0.4) - 0.2; // Kecepatan gerak X lambat & halus
+                this.speedY = (Math.random() * 0.4) - 0.2; // Kecepatan gerak Y lambat & halus
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Memantul jika menabrak batas layar
+                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'; // Warna partikel biru neon transparan
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
-        btn.disabled = true;
-        status.innerHTML = "Memproses video, tunggu sebentar...";
+        function init() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
 
-        try {
-            // Sekarang kita arahkan ke serverless function milik kita di Vercel
-            // Kita kirim lewat metode POST agar aman
-            const res = await fetch('/api/download', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ url: urlInput })
-            });
-            
-            const result = await res.json();
+        // Fungsi menghubungkan antar partikel dengan garis tipis jika jaraknya dekat
+        function connect() {
+            let opacityValue = 1;
+            // Jarak maksimal garis terhubung (lebih pendek di mobile agar rapi)
+            const maxDistance = window.innerWidth < 640 ? 70 : 110; 
 
-            if (result.success && result.videoUrl) {
-                status.innerHTML = `
-                    <p style="color: #4ade80; font-weight: bold;">Video Berhasil Ditemukan!</p>
-                    <a href="${result.videoUrl}" download="Video_Unduhan.mp4" target="_blank" class="dl-btn">
-                        KLIK & TAHAN LALU SIMPAN VIDEO
-                    </a>
-                    <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
-                        *Catatan HP: Jika video malah terputar, klik ikon titik tiga (⋮) di pojok bawah video lalu pilih <b>Download</b>.
-                    </p>
-                `;
-            } else {
-                status.innerText = result.error || "Gagal memproses link. Coba link yang lain.";
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let dx = particlesArray[a].x - particlesArray[b].x;
+                    let dy = particlesArray[a].y - particlesArray[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        opacityValue = 1 - (distance / maxDistance);
+                        ctx.strokeStyle = `rgba(59, 130, 246, ${opacityValue * 0.15})`; // Garis biru tipis
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            connect();
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+
+        /* --- SCRIPT FUNGSI DOWNLOAD --- */
+        async function downloadVideo() {
+            const urlInput = document.getElementById('url').value.trim();
+            const status = document.getElementById('status');
+            const btn = document.getElementById('btnDownload');
+            const spinner = document.getElementById('btnSpinner');
+            const btnText = document.getElementById('btnText');
+
+            if (!urlInput) {
+                alert('Masukkan link-nya dulu bos!');
+                return;
             }
 
-        } catch (e) {
-            status.innerText = "Terjadi kesalahan koneksi ke server API.";
-            console.error(e);
-        } finally {
-            btn.disabled = false;
-        }
-    }
-</script>
+            btn.disabled = true;
+            spinner.style.display = "block";
+            btnText.innerText = "Proses...";
+            status.innerHTML = "";
 
-</script>
+            try {
+                const res = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: urlInput })
+                });
+                
+                const result = await res.json();
+
+                if (result.success && result.videoUrl) {
+                    status.innerHTML = `
+                        <p style="color: #4ade80; font-weight: bold; margin-top: 25px; margin-bottom: 12px;">Video Siap Diunduh!</p>
+                        <a href="${result.videoUrl}" download="Gen_Video.mp4" target="_blank" class="dl-btn">
+                            KLIK UNTUK SIMPAN VIDEO
+                        </a>
+                    `;
+                } else {
+                    status.innerHTML = `<p style="color: #ef4444; margin-top: 25px;">${result.error || "Gagal mengekstrak link video. Coba link yang lain."}</p>`;
+                }
+
+            } catch (e) {
+                status.innerHTML = `<p style="color: #ef4444; margin-top: 25px;">Terjadi kesalahan koneksi ke server API.</p>`;
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                spinner.style.display = "none";
+                btnText.innerText = "Unduh";
+            }
+        }
+    </script>
 </body>
 </html>
