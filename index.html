@@ -85,55 +85,30 @@
         status.innerHTML = "Memproses video, tunggu sebentar...";
 
         try {
-            let apiUrl = "";
+            // Sekarang kita arahkan ke serverless function milik kita di Vercel
+            // Kita kirim lewat metode POST agar aman
+            const res = await fetch('/api/download', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: urlInput })
+            });
             
-            // Cek apakah link TikTok atau Facebook
-            if (urlInput.includes("tiktok.com")) {
-                apiUrl = `https://api.tikwm.com/api/?url=${encodeURIComponent(urlInput)}`;
-                
-                const res = await fetch(apiUrl);
-                const result = await res.json();
+            const result = await res.json();
 
-                if (result.code === 0 && result.data) {
-                    // Tautan langsung video tanpa watermark
-                    const directVideoUrl = "https://www.tikwm.com" + result.data.play;
-                    
-                    status.innerHTML = `
-                        <p style="color: #4ade80; font-weight: bold;">Video Berhasil Ditemukan!</p>
-                        <a href="${directVideoUrl}" download="TikTok_Video.mp4" target="_blank" class="dl-btn">
-                            KLIK & TAHAN LALU SIMPAN VIDEO
-                        </a>
-                        <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
-                            *Catatan HP: Jika video malah terputar, klik ikon titik tiga (⋮) di pojok bawah video lalu pilih <b>Download</b>.
-                        </p>
-                    `;
-                } else {
-                    status.innerText = "Gagal memproses link TikTok. Coba link yang lain.";
-                }
-
-            } else if (urlInput.includes("facebook.com") || urlInput.includes("fb.watch")) {
-                apiUrl = `https://api.samir.my.id/api/download/fbdown?url=${encodeURIComponent(urlInput)}`;
-                
-                const res = await fetch(apiUrl);
-                const result = await res.json();
-
-                if (result.status === 200 && result.result) {
-                    const directVideoUrl = result.result.hd || result.result.sd;
-                    
-                    status.innerHTML = `
-                        <p style="color: #4ade80; font-weight: bold;">Video FB Berhasil Ditemukan!</p>
-                        <a href="${directVideoUrl}" download="FB_Video.mp4" target="_blank" class="dl-btn">
-                            KLIK & TAHAN LALU SIMPAN VIDEO
-                        </a>
-                        <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
-                            *Catatan HP: Jika video malah terputar, klik ikon titik tiga (⋮) di pojok bawah video lalu pilih <b>Download</b>.
-                        </p>
-                    `;
-                } else {
-                    status.innerText = "Gagal memproses link FB. Pastikan video bersifat publik.";
-                }
+            if (result.success && result.videoUrl) {
+                status.innerHTML = `
+                    <p style="color: #4ade80; font-weight: bold;">Video Berhasil Ditemukan!</p>
+                    <a href="${result.videoUrl}" download="Video_Unduhan.mp4" target="_blank" class="dl-btn">
+                        KLIK & TAHAN LALU SIMPAN VIDEO
+                    </a>
+                    <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
+                        *Catatan HP: Jika video malah terputar, klik ikon titik tiga (⋮) di pojok bawah video lalu pilih <b>Download</b>.
+                    </p>
+                `;
             } else {
-                status.innerText = "Format link tidak didukung. Masukkan link TikTok atau FB.";
+                status.innerText = result.error || "Gagal memproses link. Coba link yang lain.";
             }
 
         } catch (e) {
@@ -143,6 +118,8 @@
             btn.disabled = false;
         }
     }
+</script>
+
 </script>
 </body>
 </html>
