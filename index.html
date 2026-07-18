@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gen Downloader</title>
+    <style>
+        body { 
+            background: #0f172a; 
+            color: white; 
+            font-family: sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            padding-top: 50px; 
+        }
+        .box { 
+            background: #1e293b; 
+            padding: 20px; 
+            border-radius: 12px; 
+            width: 90%; 
+            max-width: 400px; 
+            text-align: center; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 15px 0; 
+            border-radius: 6px; 
+            border: 1px solid #334155; 
+            background: #0f172a;
+            color: white;
+            box-sizing: border-box; 
+        }
+        button { 
+            background: #3b82f6; 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 6px; 
+            width: 100%; 
+            cursor: pointer; 
+            font-weight: bold;
+        }
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+        .dl-btn {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 15px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Gen Downloader</h2>
+    <p style="color: #94a3b8; font-size: 14px;">Download Video TikTok & FB Langsung</p>
+    <input type="text" id="url" placeholder="Tempel link TikTok atau FB di sini...">
+    <button id="btnDownload" onclick="downloadVideo()">Proses Video</button>
+    <div id="status" style="margin-top:20px; font-size: 14px; color: #cbd5e1;"></div>
+</div>
+
+<script>
+    async function downloadVideo() {
+        const urlInput = document.getElementById('url').value.trim();
+        const status = document.getElementById('status');
+        const btn = document.getElementById('btnDownload');
+
+        if (!urlInput) {
+            alert('Masukkan link-nya dulu bos!');
+            return;
+        }
+
+        btn.disabled = true;
+        status.innerHTML = "Memproses video, tunggu sebentar...";
+
+        try {
+            let apiUrl = "";
+            
+            // Cek apakah link TikTok atau Facebook
+            if (urlInput.includes("tiktok.com")) {
+                apiUrl = `https://api.tikwm.com/api/?url=${encodeURIComponent(urlInput)}`;
+                
+                const res = await fetch(apiUrl);
+                const result = await res.json();
+
+                if (result.code === 0 && result.data) {
+                    // Tautan langsung video tanpa watermark
+                    const directVideoUrl = "https://www.tikwm.com" + result.data.play;
+                    
+                    status.innerHTML = `
+                        <p style="color: #4ade80; font-weight: bold;">Video Berhasil Ditemukan!</p>
+                        <a href="${directVideoUrl}" download="TikTok_Video.mp4" target="_blank" class="dl-btn">
+                            KLIK & TAHAN LALU SIMPAN VIDEO
+                        </a>
+                        <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
+                            *Catatan HP: Jika video malah terputar, klik ikon titik tiga (⋮) di pojok bawah video lalu pilih <b>Download</b>.
+                        </p>
+                    `;
+                } else {
+                    status.innerText = "Gagal memproses link TikTok. Coba link yang lain.";
+                }
+
+            } else if (urlInput.includes("facebook.com") || urlInput.includes("fb.watch")) {
+                apiUrl = `https://api.samir.my.id/api/download/fbdown?url=${encodeURIComponent(urlInput)}`;
+                
+                const res = await fetch(apiUrl);
+                const result = await res.json();
+
+                if (result.status === 200 && result.result) {
+                    const directVideoUrl = result.result.hd || result.result.sd;
+                    
+                    status.innerHTML = `
+                        <p style="color: #4ade80; font-weight: bold;">Video FB Berhasil Ditemukan!</p>
+                        <a href="${directVideoUrl}" download="FB_Video.mp4" target="_blank" class="dl-btn">
+                            KLIK & TAHAN LALU SIMPAN VIDEO
+                        </a>
+                        <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
+                            *Catatan HP: Jika video malah terputar, klik ikon titik tiga (⋮) di pojok bawah video lalu pilih <b>Download</b>.
+                        </p>
+                    `;
+                } else {
+                    status.innerText = "Gagal memproses link FB. Pastikan video bersifat publik.";
+                }
+            } else {
+                status.innerText = "Format link tidak didukung. Masukkan link TikTok atau FB.";
+            }
+
+        } catch (e) {
+            status.innerText = "Terjadi kesalahan koneksi ke server API.";
+            console.error(e);
+        } finally {
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
