@@ -73,6 +73,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 0.5px;
+            padding: 9px;
         }
         .nav-links {
             display: flex;
@@ -267,6 +268,122 @@
             color: #ffffff;
         }
 
+        /* --- SECTION CARA DOWNLOAD (PREMIUM DESIGN) --- */
+        h2.tutorial-title {
+            color: #ffffff;
+            margin-top: 60px;
+            margin-bottom: 24px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            display: inline-block;
+        }
+        h2.tutorial-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: #3b82f6;
+            border-radius: 2px;
+        }
+        .tutorial-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .content {
+            background: rgba(30, 41, 59, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .content:hover {
+            border-color: rgba(59, 130, 246, 0.25);
+            background: rgba(30, 41, 59, 0.35);
+        }
+        .card-content {
+            background: linear-gradient(135deg, #bfeffc 0%, #60a5fa 100%);
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+        }
+        .content p {
+            color: #cbd5e1;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* --- KETERANGAN BAWAH --- */
+        .ket-title {
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            display: inline-block;
+        }
+        .ket-title span {
+            background: linear-gradient(to right, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .box-ket {
+            background: rgba(85, 85, 85, 0.211);
+            width: 100%;
+            max-width: 600px;
+            margin: 10px auto 12px;
+            border-radius: 12px;
+            border: 1px solid transparent; 
+            transition: border-color 0.3s, background 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 10px;
+            gap: 10px;
+        }
+        .box-ket:hover {
+            border: 1px solid rgb(190, 255, 252);
+            background: rgba(30, 41, 59, 0.35);
+        }
+        /* Class baru khusus emoji agar tidak bentrok dengan .logo navbar */
+        .emot-icon {
+            font-size: 32px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .box-ket p {
+            color: #cbd5e1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
         /* Responsive Breakpoints (Mobile HP) */
         @media (max-width: 640px) {
             h1 { font-size: 32px; }
@@ -281,12 +398,10 @@
                 border: none;
                 width: 100%;
             }
-            
             .search-container:focus-within {
                 border-color: transparent;
                 box-shadow: none;
             }
-
             .search-container input { 
                 background: rgba(30, 41, 59, 0.5); 
                 backdrop-filter: blur(20px);
@@ -297,12 +412,10 @@
                 box-sizing: border-box;
                 outline: none;
             }
-            
             .search-container input:focus {
                 border-color: #3b82f6;
                 box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
             }
-
             .search-container button { 
                 width: 100%; 
                 padding: 14px 0; 
@@ -312,6 +425,8 @@
             }
             .platform-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; }
             .nav-links { display: none; }
+            h2.tutorial-title { margin-top: 45px; font-size: 19px; }
+            .content p { font-size: 13px; }
         }
     </style>
 </head>
@@ -381,46 +496,112 @@
                 </a>
             </div>
         </div>
+
+        <!-- --- AREA TUTORIAL YANG SUDAH DIRAPIKAN --- -->
+        <h2 class="tutorial-title">Cara Download</h2>
+        
+        <div class="tutorial-container">
+            <div class="content">
+                <div class="card-content">1</div>
+                <p>Salin tautan video TikTok/Facebook/Instagram/YouTube</p>
+            </div>
+            <div class="content">
+                <div class="card-content">2</div>
+                <p>Klik bagikan pada video, lalu pilih metode salin tautan (Copy Link)</p>
+            </div>
+            <div class="content">
+                <div class="card-content">3</div>
+                <p>Tempel tautan di kotak input di atas lalu tekan tombol Unduh</p>
+            </div>
+        </div>
+
+        <!-- --- bagian dua --- -->
+        <h2 class="ket-title"><span>Kenapa harus GenDownloaded</span></h2>
+        
+        <div class="box-ket">
+            <div class="emot-icon">🛡️</div>
+            <p>video tanpa watermark</p>
+        </div>
+        <div class="box-ket">
+            <div class="emot-icon">🛍️</div>
+            <p>100% Gratis tanpa batas</p>
+        </div>
+        <div class="box-ket">
+            <div class="emot-icon">🎥</div>
+            <p>Full HD sampai 1080p</p>
+        </div>
+        <div class="box-ket">
+            <div class="emot-icon">👥</div>
+            <p>Tanpa aplikasi atau Daftar</p>
+        </div>
+        <div class="box-ket">
+            <div class="emot-icon">⚡</div>
+            <p>Langsung tersimpan ke galery</p>
+        </div>  
     </main>
 
-    <script>
+        <script>
         /* --- ENGINE SCRIPT PARTIKEL TERHUBUNG (CANVAS) --- */
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
 
-        let particlesArray = [];
-        // Kurangi jumlah partikel di mobile biar enteng
-        const numberOfParticles = window.innerWidth < 640 ? 40 : 85; 
-
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        window.addEventListener('resize', function() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+        let particlesArray = [];
+        // Mengurangi jumlah partikel di layar kecil (HP) agar tetap bersih dan lancar
+        const numberOfParticles = window.innerWidth < 640 ? 35 : 75; 
+        const maxDistance = window.innerWidth < 640 ? 80 : 110; // Jarak jaring disesuaikan
 
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1; // Ukuran partikel titik
-                this.speedX = (Math.random() * 0.4) - 0.2; // Kecepatan gerak X lambat & halus
-                this.speedY = (Math.random() * 0.4) - 0.2; // Kecepatan gerak Y lambat & halus
+                this.size = Math.random() * 1 + 0.8; // Partikel super kecil & bersih
+                
+                // Kecepatan stabil diatur konstan agar tidak ada jeda kaku saat bergerak
+                this.speedX = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 0.2 + 0.2); 
+                this.speedY = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 0.2 + 0.2);
+                this.color = 'rgba(59, 130, 246, 0.7)'; // Biru disesuaikan dengan tema utama GenDownload
             }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                // Memantul jika menabrak batas layar
+                // Memantul instan tanpa jeda di ujung layar
                 if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
                 if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
             }
-            draw() {
-                ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'; // Warna partikel biru neon transparan
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let dx = particlesArray[a].x - particlesArray[b].x;
+                    let dy = particlesArray[a].y - particlesArray[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        opacityValue = 1 - (distance / maxDistance);
+                        
+                        // Garis penghubung super tipis (0.3px) dan halus transparan
+                        ctx.strokeStyle = `rgba(59, 130, 246, ${opacityValue * 0.15})`; 
+                        ctx.lineWidth = 0.3; 
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
             }
         }
 
@@ -431,94 +612,79 @@
             }
         }
 
-        // Fungsi menghubungkan antar partikel dengan garis tipis jika jaraknya dekat
-        function connect() {
-            let opacityValue = 1;
-            // Jarak maksimal garis terhubung (lebih pendek di mobile agar rapi)
-            const maxDistance = window.innerWidth < 640 ? 70 : 110; 
-
-            for (let a = 0; a < particlesArray.length; a++) {
-                for (let b = a; b < particlesArray.length; b++) {
-                    let dx = particlesArray[a].x - particlesArray[b].x;
-                    let dy = particlesArray[a].y - particlesArray[b].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < maxDistance) {
-                        opacityValue = 1 - (distance / maxDistance);
-                        ctx.strokeStyle = `rgba(59, 130, 246, ${opacityValue * 0.15})`; // Garis biru tipis
-                        ctx.lineWidth = 0.8;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
             for (let i = 0; i < particlesArray.length; i++) {
                 particlesArray[i].update();
                 particlesArray[i].draw();
             }
+            
             connect();
             requestAnimationFrame(animate);
         }
 
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        // Panggil fungsi inisialisasi dan animasi
         init();
         animate();
 
-
-        /* --- SCRIPT FUNGSI DOWNLOAD --- */
+        /* --- FUNGSI PENGUNDUH VIDEO TIKTOK (VERCEL BACKEND) --- */
         async function downloadVideo() {
-            const urlInput = document.getElementById('url').value.trim();
-            const status = document.getElementById('status');
-            const btn = document.getElementById('btnDownload');
-            const spinner = document.getElementById('btnSpinner');
+            const urlInput = document.getElementById('url').value;
+            const btnDownload = document.getElementById('btnDownload');
             const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const statusDiv = document.getElementById('status');
 
             if (!urlInput) {
-                alert('Masukkan link-nya dulu bos!');
+                alert('Tempel tautan video terlebih dahulu!');
                 return;
             }
 
-            btn.disabled = true;
-            spinner.style.display = "block";
-            btnText.innerText = "Proses...";
-            status.innerHTML = "";
+            // Aktifkan Loader & Disable Tombol
+            btnDownload.disabled = true;
+            btnText.innerText = 'Memproses...';
+            btnSpinner.style.display = 'block';
+            statusDiv.innerHTML = '';
 
             try {
-                const res = await fetch('/api/download', {
+                // Memanggil serverless function Vercel yang ada di file script.js (backend)
+                // Sesuaikan path /api/download jika file backend ditaruh di folder /api
+                const response = await fetch('/api/download', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: urlInput })
                 });
-                
-                const result = await res.json();
+
+                const result = await response.json();
 
                 if (result.success && result.videoUrl) {
-                    status.innerHTML = `
-                        <p style="color: #4ade80; font-weight: bold; margin-top: 25px; margin-bottom: 12px;">Video Siap Diunduh!</p>
-                        <a href="${result.videoUrl}" download="Gen_Video.mp4" target="_blank" class="dl-btn">
-                            KLIK UNTUK SIMPAN VIDEO
-                        </a>
+                    statusDiv.innerHTML = `
+                        <div style="margin-top: 20px;">
+                            <p style="color: #10b981; font-weight: 600; margin-bottom: 12px;">Video Berhasil Diekstrak!</p>
+                            <a href="${result.videoUrl}" target="_blank" download="GenDownload.mp4" class="dl-btn">
+                                📥 Simpan ke Galeri
+                            </a>
+                        </div>
                     `;
                 } else {
-                    status.innerHTML = `<p style="color: #ef4444; margin-top: 25px;">${result.error || "Gagal mengekstrak link video. Coba link yang lain."}</p>`;
+                    statusDiv.innerHTML = `<p style="color: #ef4444; font-weight: 500; margin-top: 15px;">${result.error || 'Terjadi kesalahan.'}</p>`;
                 }
-
-            } catch (e) {
-                status.innerHTML = `<p style="color: #ef4444; margin-top: 25px;">Terjadi kesalahan koneksi ke server API.</p>`;
-                console.error(e);
+            } catch (error) {
+                statusDiv.innerHTML = '<p style="color: #ef4444; font-weight: 500; margin-top: 15px;">Gagal tersambung ke server.</p>';
             } finally {
-                btn.disabled = false;
-                spinner.style.display = "none";
-                btnText.innerText = "Unduh";
+                // Kembalikan status tombol
+                btnDownload.disabled = false;
+                btnText.innerText = 'Unduh';
+                btnSpinner.style.display = 'none';
             }
         }
     </script>
-</body>
-</html>
+  </body>
+ </html>
